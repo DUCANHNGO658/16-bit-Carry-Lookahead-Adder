@@ -1,0 +1,15 @@
+`timescale 1ns / 1ps
+module Carry_Lookahead_Adder_16_bit(
+input [15:0] A,
+input[15:0] B,
+input cin,
+output [15:0] sum,
+output cout
+    );
+wire [2:0] carry;
+
+CLA_4_bit CLA0(.A(A[3:0]),.B(B[3:0]),.cin(cin),.sum(sum[3:0]),.cout(carry[0])); 
+CLA_4_bit CLA1(.A(A[7:4]),.B(B[7:4]),.cin(carry[0]),.sum(sum[7:4]),.cout(carry[1]));
+CLA_4_bit CLA2(.A(A[11:8]),.B(B[11:8]),.cin(carry[1]),.sum(sum[11:8]),.cout(carry[2]));
+CLA_4_bit CLA3(.A(A[15:12]),.B(B[15:12]),.cin(carry[2]),.sum(sum[15:12]),.cout(cout));
+endmodule
