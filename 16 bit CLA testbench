@@ -1,0 +1,53 @@
+`timescale 1ns / 1ps
+module CLA_4_bit_tb;
+reg [15:0] A,B;
+reg cin;
+wire [15:0] sum;
+wire cout;
+
+Carry_Lookahead_Adder_16_bit uut(.A(A),. B(B),.cin(cin),.cout(cout),.sum(sum));
+initial begin
+// Test 1: Small numbers
+A = 16'd10; B = 16'd5; cin = 0;
+#10;
+$display("A=%d, B=%d, cin=%b => sum=%d, cout=%b", A, B, cin, sum, cout);
+
+// Test 2: Small numbers with cin = 1
+A = 16'd10; B = 16'd5; cin = 1;
+#10;
+$display("A=%d, B=%d, cin=%b => sum=%d, cout=%b", A, B, cin, sum, cout);
+
+// Test 3: Overflow (max + 1)
+A = 16'hFFFF; B = 16'd1; cin = 0;
+#10;
+$display("A=%h, B=%h, cin=%b => sum=%h, cout=%b", A, B, cin, sum, cout);
+
+// Test 4: All 1s + All 1s
+A = 16'hFFFF; B = 16'hFFFF; cin = 0;
+#10;
+$display("A=%h, B=%h, cin=%b => sum=%h, cout=%b", A, B, cin, sum, cout);
+
+// Test 5: Random mid-range
+A = 16'h1234; B = 16'h4321; cin = 0;
+#10;
+$display("A=%h, B=%h, cin=%b => sum=%h, cout=%b", A, B, cin, sum, cout);
+
+// Test 6: With cin = 1
+A = 16'h1234; B = 16'h4321; cin = 1;
+#10;
+$display("A=%h, B=%h, cin=%b => sum=%h, cout=%b", A, B, cin, sum, cout);
+
+// Test 7: Negative numbers 
+A = 16'b1111111111111110; // -2 if signed
+B = 16'b0000000000000011; // 3
+cin = 0;
+#10;
+$display("A=%d, B=%d, cin=%b => sum=%d, cout=%b", $signed(A), $signed(B), cin, $signed(sum), cout);
+
+// Test 8: Zero + Zero
+A = 0; B = 0; cin = 0;
+#10;
+$display("A=%d, B=%d, cin=%b => sum=%d, cout=%b", A, B, cin, sum, cout);
+$finish;
+end
+endmodule
